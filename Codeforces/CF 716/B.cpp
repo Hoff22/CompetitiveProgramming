@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+
+#define N 200000
+#define MAX 1000000000
+#define E 0.00000001
+#define MOD 1000000007
+#define INF 0x3f3f3f3f
+#define LEFT(x) (2 * x)
+#define RIGHT(x) (2 * x + 1)
+#define PAR 0
+#define IMPAR 1
+
+using namespace std;
+
+void solve(){
+	int n, k;
+	scanf("%d %d", &n, &k);
+
+	long long ans = 1;
+	int i = (1<<k) - 1;
+	while(i){
+		ans *= n;
+		ans %= MOD;
+		i/=2;
+	}
+	printf("%lld\n", ans);
+}
+
+// 011 3
+// 101 5
+// 110 6
+
+int main(){
+	
+	int t;
+	scanf("%d", &t);
+	
+	while(t--){
+		solve();
+	}
+    return 0;
+
+}

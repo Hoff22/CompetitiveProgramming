@@ -1,0 +1,5 @@
+3
+Loop::CallA 0
+Loop::CallB 2
+Loop::CallA thing::PROGRAM
+thing::PROGRAM 0

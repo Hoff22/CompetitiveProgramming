@@ -1,0 +1,6 @@
+5
+'Acao maluca' 3000
+'Acao ifood' 5000
+'Acao movilepay' 5005
+'Acao simpla' 10
+'Acao movile' 50
