@@ -52,42 +52,35 @@ void solve(){
 		}
 	}
 
+	queue<int> q;
+
+	for(int i = 1; i < 100; i++){
+		if(!in[i]) q.push(i), order[i] = 0;
+	}
+
+	for(int i = 1; i < 100; i++){
+		if(order[i] == 0) cout << i << "!!!!! " << g[i].size() << endl;;
+	}
+	return;
+	
+	while(!q.empty()){
+		int u = q.front();
+		q.pop();
+		for(int v : g[u]){
+			in[v]--;
+			if(!in[v]){
+				order[v] = order[u]+1;
+				q.push(v);
+			}
+		}
+	}
+
+
 	int ans = 0;
 
 	int cnt = 0;
 
 	for(auto v : a){
-
-		vector<int> curin = in;
-
-		set<int> has;
-		for(int i : v) has.insert(i);
-
-		queue<int> q;
-
-		for(int i = 1; i < 100; i++) order[i] = 101;
-
-		for(int i = 1; i < 100; i++){
-			if(has.count(i) == 0){
-				for(int j : g[i]){
-					curin[j]--;
-				}
-			}
-		}
-		for(int j : v) if(curin[j] == 0 and has.count(j)) q.push(j), order[j] = 0;
-
-		while(!q.empty()){
-			int u = q.front();
-			q.pop();
-			for(int j : g[u]){
-				curin[j]--;
-				if(curin[j] == 0 and has.count(j)){
-					order[j] = order[u]+1;
-					q.push(j);
-				}
-			}
-		}
-
 		vector<int> b = v;
 		sort(b.begin(), b.end(), [&](int u, int v) { return order[u] < order[v]; });
 
@@ -101,8 +94,8 @@ void solve(){
 		cout << endl;
 		cout << "--" << endl;
 
-		if(v != b){
-			ans += b[b.size()/2];
+		if(v == b){
+			ans += v[v.size()/2];
 			cnt++;
 		}
 	}
