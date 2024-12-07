@@ -7,6 +7,7 @@
 #include<queue>
 #include<string>
 #include<set>
+#include<unordered_map>
 
 #define MOD 1000000007
 #define INF 0x3f3f3f3f
@@ -206,6 +207,29 @@ struct Bigint {
 ll intPow(int b, int x){ ll cur = 1; while(x--) cur *= b; return cur;}
 ll intLog10(int x){int res = 0; while(x) res++, x/=10; return res;}
 
+struct pairhash {
+public:
+  template <typename T, typename U>
+  std::size_t operator()(const std::pair<T, U> &x) const
+  {
+    return std::hash<T>()(x.first) ^ std::hash<U>()(x.second);
+  }
+};
+
+unordered_map<pair<int,ll>, bool, pairhash> DP;
+
+int dp(vector<ll>& a, int i, ll cur){
+	if(a.size() == i) return (cur == a[0]);
+
+	if(DP.count({i,cur})) return DP[{i,cur}];
+
+	return DP[{i,cur}] = (
+		((cur > LLMAX - a[i]) ? 0 : dp(a, i+1, cur + a[i])) + 
+		((cur > LLMAX / a[i]) ? 0 : dp(a, i+1, cur * a[i])) + 
+		((intLog10(cur) + intLog10(a[i]) > 18) ? 0 : dp(a, i+1, (cur * intPow(10,intLog10(a[i])) + a[i])) )
+	);
+}
+
 void solve(){
 
 	Bigint ans(0);
@@ -222,42 +246,14 @@ void solve(){
 			else a.back() = a.back() * 10ll + (s[i] - '0');
 		}
 
-		cout << a[0] << " => ";
-		for(int i = 0; i < a.size(); i++) cout << a[i] << " ";
-		cout << endl;
+		// cout << a[0] << " => ";
+		// for(int i = 0; i < a.size(); i++) cout << a[i] << " ";
+		// cout << endl;
 
-		int mxMax = intPow(3,((int)a.size()-2));
+		DP.clear();
 
-		for(int m = 0; m < mxMax; m++){
-			ll cur = a[1];
-			// cout << ">> " << a[1] << " ";
-			int i;
-			for(i = 2; i < a.size(); i++){
-				int trit = (m/(intPow(3,i-2))) % 3;
-
-				if(trit == 0){
-					// cout << "+ ";
-					if(cur > LLMAX - a[i]) break;
-					cur += a[i];
-				}
-				else if(trit == 1){
-					// cout << "* ";
-					if(cur > LLMAX / a[i]) break;
-					cur *= a[i];
-				}
-				else{
-					// cout << "|| ";
-					if(intLog10(cur) + intLog10(a[i]) > 18) break;
-					cur *= intPow(10,intLog10(a[i]));
-					cur += a[i];
-				}
-				// cout << a[i] << " ";
-			}
-			// cout << "= " << cur << endl;
-			if(cur == a[0] and i >= a.size()){
-				ans += cur;
-				break;
-			}
+		if(dp(a, 2, a[1])){
+			ans += a[0];
 		}
 	}
 
