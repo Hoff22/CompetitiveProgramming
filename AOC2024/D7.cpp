@@ -216,6 +216,8 @@ public:
   }
 };
 
+// --------- end of template ---------
+
 unordered_map<pair<int,ll>, bool, pairhash> DP;
 
 int dp(vector<ll>& a, int i, ll cur){
