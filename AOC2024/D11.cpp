@@ -5,6 +5,7 @@
 #include<algorithm>
 #include<string>
 #include<iostream>
+#include<map>
 #include<tgmath.h>
 
 #define N 200000
@@ -204,15 +205,20 @@ ll intLog10(int x){int res = 0; while(x) res++, x/=10; return res;}
 
 // - template -
 
-ll cnt(Bigint x, int k){
+map<pair<string,int>, Bigint> DP; 
+
+Bigint cnt(Bigint x, int k){
 	// cout << x << " ";
 
 	if(k == 0){
 		// cout << x << " ";
-		return 1;	
+		return Bigint(1);	
 	} 
+
+    if(DP.count({x.a, k})) return DP[{x.a,k}];
+
 	if(x == 0){
-		return cnt(Bigint(1), k-1);
+		return DP[{"1", k-1}] = cnt(Bigint(1), k-1);
 	}
 	if(x.a.size() % 2 == 0){
 		string l, r;
@@ -221,25 +227,31 @@ ll cnt(Bigint x, int k){
 		reverse(l.begin(), l.end());
 		reverse(r.begin(), r.end());
 		// cout << "-> " << l << " " << r << endl;
+        if(x.a.size() < 10){
+            return DP[{x.a,k}] = cnt(Bigint(l), k-1) + cnt(Bigint(r),k-1);
+        }
 		return cnt(Bigint(l), k-1) + cnt(Bigint(r),k-1);
 	}
 	Bigint y = x;
 	y *= 2024;
 	// cout << "-> " << y << endl;
+    if(x.a.size() < 10){
+        return DP[{x.a,k}] = cnt(y, k-1);
+    }
 	return cnt(y, k-1);
 }
 
 void solve(){
+
+    Bigint ans = Bigint(0);
+
 	string s;
-	ll ans = 0;
-
-	vector<string> ss;
-	while(cin >> s) ss.push_back(s);
-
-	for(string x : ss) ans += cnt(Bigint(x), 75);
+	while(cin >> s) ans += cnt(Bigint(s), 75);
 	cout << endl;
-	cout << endl;
-	cout << ans << endl;
+
+
+
+    cout << ans << endl;
 }
 
 int main(){
