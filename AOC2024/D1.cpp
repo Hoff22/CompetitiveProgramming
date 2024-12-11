@@ -17,33 +17,23 @@ typedef unsigned long long ull;
 
 using namespace std;
 
-void solve(){
-	vector<int> a, b;
-	int x,y;
-	while(cin >> x >> y){
-		a.push_back(x), b.push_back(y);
+ll cnt(double lg10, int k){
+	if(!k) return 1;
+
+	if(floor(lg10) % 2 == 0){
+		return cnt(lg10/2, k-1) + cnt(lg10/2, k-1);
 	}
-	sort(a.begin(), a.end());
-	sort(b.begin(), b.end());
-	long long ans  = 0;
-	for(int i = 0; i < a.size(); i++){
-		ans += abs(a[i] - b[i]);
-	}
-	cout << ans << endl;
+	return cnt(lg10 * 3.30621051, k-1);
 }
 
-void solve2(){
-	vector<int> a;
-	int x,y;
-	while(cin >> x >> y){
-		a.push_back(x);
-		cnt[y]++;
+void solve(){
+	ll n = 8;
+	ll ans = 0;
+	for(int i = 0; i < n; i++){
+		int x;
+		cin >> x;
+		ans += cnt(log10l(x), 25);		
 	}
-	unsigned long long ans = 0;
-	for(int i : a){
-		ans += (i * cnt[i]);
-	}
-
 	cout << ans << endl;
 }
 
